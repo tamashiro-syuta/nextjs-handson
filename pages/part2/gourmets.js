@@ -5,6 +5,11 @@ import getConfig from 'next/config';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import List from '@mui/material/List';
@@ -85,6 +90,14 @@ const Shops = ({ firstViewShops, genres }) => {
             setKeyword(event.target.value);
           }}
         />
+        <FormControl fullWidth>
+          <FormLabel id="genres">ジャンル</FormLabel>
+          <RadioGroup row aria-labelledby="genres" name="genres">
+            {genres.map((genre) => {
+              return <FormControlLabel key={genre.id} value={genre.code} control={<Radio />} label={genre.name} />;
+            })}
+          </RadioGroup>
+        </FormControl>
         <Button
           variant="contained"
           margin="normal"

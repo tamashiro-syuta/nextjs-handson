@@ -14,6 +14,7 @@ const shops = async (req, res) => {
   query.set('format', 'json');
   query.set('large_area', req.query.large_area || 'Z098'); //Z098は、沖縄
   if (req.query.keyword) query.set('keyword', req.query.keyword);
+  if (req.query.code) query.set('genre', req.query.code);
 
   // レスポンスを取得
   const response = await fetch(`https://webservice.recruit.co.jp/hotpepper/gourmet/v1/?${query.toString()}`);

@@ -47,6 +47,7 @@ const fetchGenres = async () => {
 
 const Shops = ({ firstViewShops, genres }) => {
   const [keyword, setKeyword] = React.useState('');
+  const [code, setCode] = React.useState(null);
   const [shops, setShops] = React.useState([]);
 
   // useEffect --> コンポーネントが再レンダリングされた後に指定した関数(この関数を『副作用』という)を処理する。
@@ -92,7 +93,15 @@ const Shops = ({ firstViewShops, genres }) => {
         />
         <FormControl fullWidth>
           <FormLabel id="genres">ジャンル</FormLabel>
-          <RadioGroup row aria-labelledby="genres" name="genres">
+          <RadioGroup
+            row
+            aria-labelledby="genres"
+            name="genres"
+            value={code}
+            onChange={(event, code) => {
+              setCode(code);
+            }}
+          >
             {genres.map((genre) => {
               return <FormControlLabel key={genre.id} value={genre.code} control={<Radio />} label={genre.name} />;
             })}

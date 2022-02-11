@@ -2,6 +2,15 @@
 
 import React from 'react';
 import getConfig from 'next/config';
+import Container from '@mui/material/Container';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import Avatar from '@mui/material/Avatar';
 
 // データ取得用の関数
 const fetchData = async (keyword) => {
@@ -21,12 +30,53 @@ const fetchData = async (keyword) => {
 
 const Shops = ({ shops }) => {
   return (
-    <ul>
-      {/* 取得したデータの数だけリストを作成 */}
-      {shops.map((shop) => {
-        return <li key={shop.id}>{shop.name}</li>;
-      })}
-    </ul>
+    // <ul>
+    //   {/* 取得したデータの数だけリストを作成 */}
+    //   {shops.map((shop) => {
+    //     return <li key={shop.id}>{shop.name}</li>;
+    //   })}
+    // </ul>
+    <Container component="main" maxWidth="md">
+      <Box
+        component="from"
+        noValidate
+        sx={{
+          marginTop: 8,
+          display: 'flex',
+        }}
+        alignItems="center"
+        justify="center"
+      />
+      <List>
+        {shops.map((shop) => {
+          return (
+            <ListItem key={shop.id}>
+              <ListItemButton
+                onClick={() => {
+                  // shopの詳細へ
+                  console.log('click!!!');
+                }}
+              >
+                <ListItemAvatar>
+                  <Avatar alt={shop.name} src={shop.logo_image} />
+                </ListItemAvatar>
+                <ListItemText
+                  primary={`${shop.genre.name} ${shop.name}`}
+                  secondary={
+                    <>
+                      <Typography variant="body1" component="span">
+                        {`${shop.catch} ${shop.shop_detail_memo}`}
+                      </Typography>
+                      <Typography variant="caption">{shop.address}</Typography>
+                    </>
+                  }
+                />
+              </ListItemButton>
+            </ListItem>
+          );
+        })}
+      </List>
+    </Container>
   );
 };
 

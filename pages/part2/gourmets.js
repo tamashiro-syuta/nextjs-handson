@@ -31,7 +31,16 @@ const fetchShops = async (keyword, code) => {
   return await res.json();
 };
 
-const Shops = ({ firstViewShops }) => {
+// ジャンルを指定する用
+const fetchGenres = async () => {
+  const { API_HOST } = getConfig().publicRuntimeConfig;
+
+  const host = process.browser ? '' : API_HOST;
+  const res = await fetch(`${host}/api/genres`);
+  return await res.json();
+};
+
+const Shops = ({ firstViewShops, genres }) => {
   const [keyword, setKeyword] = React.useState('');
   const [shops, setShops] = React.useState([]);
 
@@ -134,11 +143,15 @@ const Shops = ({ firstViewShops }) => {
 
 // 上のShopsに引数を渡している
 export const getServerSideProps = async (req) => {
+  // shopを取得
   const shops = await fetchShops(req.query.keyword, req.query.code);
+  // genreを取得
+  const genres = await fetchGenres();
 
   return {
     props: {
       firstViewShops: shops,
+      genres,
     },
   };
 };

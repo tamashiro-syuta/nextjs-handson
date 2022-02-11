@@ -1,6 +1,6 @@
 // SSR(サーバーサイドレンダリング) --> サーバー側でデータ取得、htmlを組み立て返す。動的に変化しないデータ取得や初期表示に使う
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import getConfig from 'next/config';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
@@ -30,8 +30,26 @@ const fetchData = async (keyword) => {
   return await res.json();
 };
 
-const Shops = ({ shops }) => {
+const Shops = ({ firstViewShops }) => {
   const [keyword, setKeyword] = React.useState('');
+  const [shops, setShops] = React.useState([]);
+
+  // useEffect --> コンポーネントが再レンダリングされた後に指定した関数(この関数を『副作用』という)を処理する。
+  // 副作用は、最初のレンダー時 + レンダリングするたびに呼ばれる(ここでは、初回 + 第２引数であるfirstViewShopsが更新されるたびに呼ばれる）
+  // コンポーネント内(今回のshops)で書くことで、副作用内のstateにアクセスできる
+  useEffect(() => {
+    setShops(firstViewShops);
+  }, [firstViewShops]);
+
+  // 検索ボタンがクリックされた時
+  const onSearchClick = async () => {
+    // テキストフィールドのテキストに応じたデータを取得
+    const data = await fetchData(keyword);
+
+    //
+    setShops(data);
+    setKeyword('');
+  };
 
   return (
     <Container component="main" maxWidth="md">
@@ -62,7 +80,7 @@ const Shops = ({ shops }) => {
           margin="normal"
           fullWidth
           onClick={() => {
-            setKeyword('');
+            onSearchClick();
           }}
         >
           検索
@@ -119,7 +137,7 @@ export const getServerSideProps = async (req) => {
 
   return {
     props: {
-      shops: data,
+      firstViewShops: data,
     },
   };
 };

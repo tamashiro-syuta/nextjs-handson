@@ -15,13 +15,14 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 
 // データ取得用の関数
-const fetchData = async (keyword) => {
+const fetchShops = async (keyword, code) => {
   // next.config.jsからAPIキーを取得
   const { API_HOST } = getConfig().publicRuntimeConfig;
 
   // クエリを作成
   const query = new URLSearchParams();
   if (keyword) query.set('keyword', keyword);
+  if (code) query.set('code', code);
 
   // ホストによってurlを変更（http(ローカルなど)なのにurlでhttpsを指定していたら繋がらないから）
   const host = process.browser ? '' : API_HOST;
@@ -44,7 +45,7 @@ const Shops = ({ firstViewShops }) => {
   // 検索ボタンがクリックされた時
   const onSearchClick = async () => {
     // テキストフィールドのテキストに応じたデータを取得
-    const data = await fetchData(keyword);
+    const data = await fetchShops(keyword, code);
 
     //setShopsによってshopsが更新されたので、再レンダリングされ、viewを再描画
     setShops(data);
@@ -133,11 +134,11 @@ const Shops = ({ firstViewShops }) => {
 
 // 上のShopsに引数を渡している
 export const getServerSideProps = async (req) => {
-  const data = await fetchData(req.query.keyword);
+  const shops = await fetchShops(req.query.keyword, req.query.code);
 
   return {
     props: {
-      firstViewShops: data,
+      firstViewShops: shops,
     },
   };
 };
